@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { 
   LayoutDashboard, 
   CalendarDays, 
@@ -20,13 +20,34 @@ import {
   ShieldCheck,
   Zap,
   Menu,
-  Search
+  Search,
+  Upload,
+  X,
+  ImageIcon
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const AdminSettings = () => {
   const [activeTab, setActiveTab] = useState('general');
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (file: File | null) => {
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => setLogoUrl(e.target?.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files[0];
+    handleFileChange(file);
+  };
 
   const tabs = [
     { id: 'general', label: 'Cài đặt chung', icon: Globe },
@@ -207,18 +228,38 @@ const AdminSettings = () => {
                          </div>
 
                          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-8">
-                            <h3 className="text-lg font-black text-slate-900 tracking-tight mb-8">Thương hiệu & Logo</h3>
-                            <div className="flex items-center gap-8">
-                               <div className="w-24 h-24 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-4xl font-black shadow-xl shadow-blue-600/30">P</div>
-                               <div className="space-y-4 flex-1">
-                                  <p className="text-xs text-slate-500 font-medium leading-relaxed">Logo của bạn sẽ xuất hiện trên Dashboard, ứng dụng người dùng và hóa đơn in ra.</p>
-                                  <div className="flex gap-3">
-                                     <button className="px-5 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase hover:opacity-90 transition-all">Tải lên Logo mới</button>
-                                     <button className="px-5 py-2 border border-slate-200 text-slate-600 rounded-xl text-[10px] font-black uppercase hover:bg-slate-50 transition-all">Gỡ bỏ</button>
-                                  </div>
+                             <h3 className="text-lg font-black text-slate-900 tracking-tight mb-8">Thuong hieu and Logo</h3>
+                             <div className="flex items-start gap-8 mb-8">
+                               <div className="relative">
+                                 <div className="w-28 h-28 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-4xl font-black shadow-xl shadow-blue-600/30 overflow-hidden">
+                                   {logoUrl ? <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" /> : <span>P</span>}
+                                 </div>
+                                 {logoUrl && (<button onClick={() => setLogoUrl(null)} className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"><X className="w-3 h-3" /></button>)}
                                </div>
-                            </div>
-                         </div>
+                               <div className="flex-1">
+                                 <p className="text-sm font-bold text-slate-900 mb-1">Logo hien tai</p>
+                                 <p className="text-xs text-slate-500 font-medium leading-relaxed mb-4">Logo se xuat hien tren Dashboard, ung dung nguoi dung va hoa don in ra. Khuyen nghi kich thuoc toi thieu 256x256px, dinh dang PNG/SVG.</p>
+                                 <div className="flex gap-3">
+                                   <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text[10px] font-black uppercase hover:opacity-90 transition-all shadow-lg">
+                                     <Upload className="w-3.5 h-3.5" />
+                                     Tai len Logo moi
+                                   </button>
+                                   {logoUrl && (<button onClick={() => setLogoUrl(null)} className="flex items-center gap-2 px-5 py-2.5 border border-red-200 text-red-500 rounded-xl text-[10px] font-black uppercase hover:bg-red-50 transition-all"><X className="w-3.5 h-3.5" />Go bo</button>)}
+                                 </div>
+                               </div>
+                             </div>
+                             <div onClick={() => fileInputRef.current?.click()} onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }} onDragLeave={() => setIsDragOver(false)} onDrop={handleDrop} className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-300 ${isDragOver ? "border-blue-500 bg-blue-50 scale-[1.01]" : "border-slate-200 hover:border-blue-400 hover:bg-blue-50/40"}`}>
+                               <div className="flex flex-col items-center gap-3">
+                                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors ${isDragOver ? "bg-blue-100 text-blue-600" : "bg-slate-100 text-slate-400"}`}>
+                                   <ImageIcon className="w-7 h-7" />
+                                 </div>
+                                 <p className="text-sm font-bold text-slate-700">{isDragOver ? "Tha file vao day..." : "Keo va tha file vao day"}</p>
+                                 <p className="text-xs text-slate-400 font-medium mt-1">hoac <span className="text-blue-600 font-bold underline underline-offset-2">click de chon file</span></p>
+                                 <p className="text-[10px] text-slate-300 font-bold uppercase tracking-widest">PNG, JPG, SVG, WEBP - Toi da 5MB</p>
+                               </div>
+                             </div>
+                             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e.target.files?.[0] ?? null)} />
+                          </div>
                       </motion.div>
                    )}
 
