@@ -286,6 +286,8 @@ public class AuthService : IAuthService
         return ApiResponse<UserResponse>.Ok(MapToResponse(user));
     }
 
+    // ── Google Login ─────────────────────────────────────────────────────────
+
     public async Task<ApiResponse<AuthResponse>> LoginWithGoogleAsync(string idToken, string? ipAddress = null)
     {
         try
@@ -372,6 +374,8 @@ public class AuthService : IAuthService
         }
     }
 
+    // ── Profile and Admin Updates ────────────────────────────────────────────
+
     public async Task<ApiResponse<UserResponse>> UpdateProfileAsync(Guid userId, UpdateProfileRequest request)
     {
         var user = await _userRepo.GetByIdAsync(userId);
@@ -381,6 +385,8 @@ public class AuthService : IAuthService
         user.FirstName = request.FirstName.Trim();
         user.LastName = request.LastName.Trim();
         user.PhoneNumber = request.PhoneNumber.Trim();
+        user.LicensePlate = request.LicensePlate.Trim();
+        user.VehicleType = request.VehicleType.Trim();
         user.Address = request.Address.Trim();
 
         _userRepo.Update(user);
@@ -422,6 +428,8 @@ public class AuthService : IAuthService
         user.FirstName = request.FirstName.Trim();
         user.LastName = request.LastName.Trim();
         user.PhoneNumber = request.PhoneNumber?.Trim();
+        user.LicensePlate = request.LicensePlate?.Trim();
+        user.VehicleType = request.VehicleType?.Trim();
         user.Address = request.Address?.Trim();
         user.Role = newRole;
         user.Status = newStatus;
@@ -429,8 +437,7 @@ public class AuthService : IAuthService
         _userRepo.Update(user);
         await _userRepo.SaveChangesAsync();
 
-        _logger.LogInformation(
-            "User {TargetId} updated by {ActorId} ({ActorRole})", targetUserId, actorId, actorRole);
+        _logger.LogInformation("User {TargetId} updated by {ActorId} ({ActorRole})", targetUserId, actorId, actorRole);
         return ApiResponse<UserResponse>.Ok(MapToResponse(user), "User updated successfully.");
     }
 
@@ -547,6 +554,8 @@ public class AuthService : IAuthService
         FirstName = user.FirstName,
         LastName = user.LastName,
         PhoneNumber = user.PhoneNumber,
+        LicensePlate = user.LicensePlate,
+        VehicleType = user.VehicleType,
         Address = user.Address,
         Role = user.Role.ToString(),
         Status = user.Status.ToString(),

@@ -37,3 +37,13 @@ hs_err_pid*
 replay_pid*
 
 /.vs
+
+# .NET / C# ignores
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+App_Data/
+packages/

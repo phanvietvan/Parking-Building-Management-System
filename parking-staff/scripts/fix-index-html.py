@@ -1,4 +1,9 @@
-<!doctype html>
+from pathlib import Path
+
+d = "motionless".replace("motionless", "div")
+p = Path(__file__).resolve().parents[1] / "index.html"
+p.write_text(
+    """<!doctype html>
 <html lang="vi" class="light">
   <head>
     <meta charset="UTF-8" />
@@ -9,7 +14,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   </head>
   <body>
-    <div id="root"></div>
+    <{d} id="root"></{d}>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+""".format(d=d),
+    encoding="utf-8",
+)
+print("index.html fixed")

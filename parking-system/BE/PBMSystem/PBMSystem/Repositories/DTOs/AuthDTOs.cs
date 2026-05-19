@@ -28,6 +28,12 @@ public class LoginRequest
     public string Password { get; set; } = string.Empty;
 }
 
+public class GoogleLoginRequest
+{
+    [Required]
+    public string IdToken { get; set; } = string.Empty;
+}
+
 public class RefreshTokenRequest
 {
     [Required]
@@ -49,10 +55,24 @@ public class RevokeTokenRequest
     public string RefreshToken { get; set; } = string.Empty;
 }
 
-public class GoogleLoginRequest
+public class AdminUpdateUserRequest
 {
+    [Required, MinLength(2), MaxLength(50)]
+    public string FirstName { get; set; } = string.Empty;
+
+    [Required, MinLength(2), MaxLength(50)]
+    public string LastName { get; set; } = string.Empty;
+
+    public string? PhoneNumber { get; set; }
+    public string? LicensePlate { get; set; }
+    public string? VehicleType { get; set; }
+    public string? Address { get; set; }
+
     [Required]
-    public string IdToken { get; set; } = string.Empty;
+    public string Role { get; set; } = "User";
+
+    [Required]
+    public string Status { get; set; } = "Active";
 }
 
 public class UpdateProfileRequest
@@ -67,25 +87,13 @@ public class UpdateProfileRequest
     public string PhoneNumber { get; set; } = string.Empty;
 
     [Required]
+    public string LicensePlate { get; set; } = string.Empty;
+
+    [Required]
+    public string VehicleType { get; set; } = string.Empty;
+
+    [Required]
     public string Address { get; set; } = string.Empty;
-}
-
-public class AdminUpdateUserRequest
-{
-    [Required, MinLength(2), MaxLength(50)]
-    public string FirstName { get; set; } = string.Empty;
-
-    [Required, MinLength(2), MaxLength(50)]
-    public string LastName { get; set; } = string.Empty;
-
-    public string? PhoneNumber { get; set; }
-    public string? Address { get; set; }
-
-    [Required]
-    public string Role { get; set; } = "User";
-
-    [Required]
-    public string Status { get; set; } = "Active";
 }
 
 // ── Requests — OTP Registration ───────────────────────────────────────────────
@@ -156,6 +164,8 @@ public class UserResponse
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? PhoneNumber { get; set; }
+    public string? LicensePlate { get; set; }
+    public string? VehicleType { get; set; }
     public string? Address { get; set; }
     public string Role { get; set; } = "User";
     public string Status { get; set; } = "Active";
