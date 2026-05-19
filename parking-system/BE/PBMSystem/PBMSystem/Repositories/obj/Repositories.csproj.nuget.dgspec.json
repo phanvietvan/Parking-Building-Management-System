@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\insig\\Source\\Repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\Repositories.csproj": {}
+    "C:\\Users\\insig\\source\\repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\Repositories.csproj": {}
   },
   "projects": {
-    "C:\\Users\\insig\\Source\\Repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\Repositories.csproj": {
+    "C:\\Users\\insig\\source\\repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\insig\\Source\\Repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "C:\\Users\\insig\\source\\repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "C:\\Users\\insig\\Source\\Repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\Repositories.csproj",
-        "packagesPath": "C:\\Users\\insig\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\insig\\Source\\Repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\obj\\",
+        "projectPath": "C:\\Users\\insig\\source\\repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\Repositories.csproj",
+        "packagesPath": "C:\\Users\\insig\\AppData\\Local\\Temp\\cursor-sandbox-cache\\bbb6d1f941217e8d7138963f81943713\\nuget",
+        "outputPath": "C:\\Users\\insig\\source\\repos\\Parking-Building-Management-System\\parking-system\\BE\\PBMSystem\\PBMSystem\\Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -60,7 +60,7 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
+            "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[8.0.0, )"
             },
