@@ -18,10 +18,6 @@ builder.Services.Configure<SmtpSettings>(
     builder.Configuration.GetSection("SmtpSettings"));
 
 // ── Database (SQLite) ─────────────────────────────────────────────────────────
-// The .db file is created automatically on first run in the project directory.
-// It is gitignored — each developer gets their own local copy.
-// To switch to SQL Server later: replace UseSqlite with UseSqlServer here,
-// swap the package in both .csproj files, and update the connection string.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(
         builder.Configuration.GetConnectionString("DefaultConnection"),
