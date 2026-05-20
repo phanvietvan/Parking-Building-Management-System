@@ -6,12 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PBMSystem.API.Controllers;
 
-/// <summary>
-/// Base authentication — active session management only.
-/// Handles login, token refresh, logout, and profile retrieval.
-/// </summary>
 [ApiController]
-[Route("api/auth")]
+[Route("api/[controller]")]
 [Produces("application/json")]
 public class AuthController : ControllerBase
 {
@@ -22,16 +18,16 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    /// <summary>Login with Google credential (ID token or access token).</summary>
-    [HttpPost("google")]
+    /// <summary>Register a new user account.</summary>
+    [HttpPost("register")]
     [ProducesResponseType(typeof(ApiResponse<AuthResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<AuthResponse>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var result = await _authService.LoginWithGoogleAsync(request.IdToken, GetClientIp());
+        var result = await _authService.RegisterAsync(request, GetClientIp());
         return result.Success ? Ok(result) : BadRequest(result);
     }
 
@@ -48,7 +44,20 @@ public class AuthController : ControllerBase
         return result.Success ? Ok(result) : Unauthorized(result);
     }
 
-    /// <summary>Issue a new access + refresh token pair using a valid refresh token.</summary>
+    /// <summary>Login or Register with Google OAuth.</summary>
+    [HttpPost("google")]
+    [ProducesResponseType(typeof(ApiResponse<AuthResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Google([FromBody] GoogleLoginRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = await _authService.GoogleLoginAsync(request, GetClientIp());
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
+    /// <summary>Issue new access + refresh token pair using a valid refresh token.</summary>
     [HttpPost("refresh")]
     [ProducesResponseType(typeof(ApiResponse<AuthResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<AuthResponse>), StatusCodes.Status401Unauthorized)]
@@ -61,7 +70,7 @@ public class AuthController : ControllerBase
         return result.Success ? Ok(result) : Unauthorized(result);
     }
 
-    /// <summary>Revoke a refresh token — logout from this device.</summary>
+    /// <summary>Revoke a refresh token (logout from one device).</summary>
     [HttpPost("revoke")]
     [Authorize]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
@@ -75,6 +84,21 @@ public class AuthController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result);
     }
 
+    /// <summary>Change the authenticated user's password (revokes all sessions).</summary>
+    [HttpPost("change-password")]
+    [Authorize]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var userId = User.GetUserId();
+        var result = await _authService.ChangePasswordAsync(userId, request);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
     /// <summary>Get the authenticated user's profile.</summary>
     [HttpGet("me")]
     [Authorize]
@@ -85,21 +109,6 @@ public class AuthController : ControllerBase
         var userId = User.GetUserId();
         var result = await _authService.GetProfileAsync(userId);
         return result.Success ? Ok(result) : NotFound(result);
-    }
-
-    /// <summary>Update the authenticated user's profile.</summary>
-    [HttpPut("profile")]
-    [Authorize]
-    [ProducesResponseType(typeof(ApiResponse<UserResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var userId = User.GetUserId();
-        var result = await _authService.UpdateProfileAsync(userId, request);
-        return result.Success ? Ok(result) : BadRequest(result);
     }
 
     // ── Private ───────────────────────────────────────────────────────────────
