@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import { Alert, BtnPrimary, BtnSecondary, BackLink } from "../../components/ui/SharedUI";
 
-export default function LockedScreen({ onNavigate }) {
+interface LockedScreenProps {
+  onNavigate: (screen: string) => void;
+}
+
+export default function LockedScreen({ onNavigate }: LockedScreenProps) {
   const [secs, setSecs] = useState(899);
-  
+
   useEffect(() => {
     const t = setInterval(() => setSecs(s => Math.max(0, s - 1)), 1000);
     return () => clearInterval(t);
   }, []);
-  
+
   const m = String(Math.floor(secs / 60)).padStart(2, "0");
   const s = String(secs % 60).padStart(2, "0");
 

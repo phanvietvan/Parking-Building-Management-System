@@ -2,13 +2,27 @@ import { useState } from "react";
 import { C } from "../../config/theme";
 import { InputField, BtnPrimary, Alert, StepDots, BackLink, StrengthBar, OtpInputRow, ResendTimer } from "../../components/ui/SharedUI";
 
-export default function RegisterScreen({ onNavigate }) {
-  const [step, setStep] = useState(0);
-  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "", pw: "", pw2: "", terms: false });
-  const [errors, setErrors] = useState({});
+interface RegisterScreenProps {
+  onNavigate: (screen: string) => void;
+}
 
-  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
-  const setErr = (k, v) => setErrors(e => ({ ...e, [k]: v }));
+interface FormState {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  pw: string;
+  pw2: string;
+  terms: boolean;
+}
+
+export default function RegisterScreen({ onNavigate }: RegisterScreenProps) {
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState<FormState>({ firstName: "", lastName: "", email: "", phone: "", pw: "", pw2: "", terms: false });
+  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+
+  const set = <K extends keyof FormState>(k: K, v: FormState[K]) => setForm(f => ({ ...f, [k]: v }));
+  const setErr = (k: keyof FormState, v: string) => setErrors(e => ({ ...e, [k]: v }));
 
   const next1 = () => {
     if (!form.email) { setErr("email", "Vui lòng nhập email."); return; }

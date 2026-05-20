@@ -2,7 +2,11 @@ import { useState } from "react";
 import { C } from "../../config/theme";
 import { InputField, BtnPrimary, Alert, StepDots, BackLink, StrengthBar, OtpInputRow, ResendTimer } from "../../components/ui/SharedUI";
 
-export default function ForgotScreen({ onNavigate }) {
+interface ForgotScreenProps {
+  onNavigate: (screen: string) => void;
+}
+
+export default function ForgotScreen({ onNavigate }: ForgotScreenProps) {
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");

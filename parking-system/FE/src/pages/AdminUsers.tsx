@@ -29,8 +29,8 @@ type User = {
 
 const statusStyle = (s: string) =>
   s === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-  s === 'Suspended' ? 'bg-red-50 text-red-600 border-red-100' :
-  'bg-slate-50 text-slate-400 border-slate-200';
+    s === 'Suspended' ? 'bg-red-50 text-red-600 border-red-100' :
+      'bg-slate-50 text-slate-400 border-slate-200';
 
 // ─── Edit Modal ────────────────────────────────────────────────────────────────
 const EditModal = ({ user, onClose, onSave }: { user: User; onClose: () => void; onSave: (u: User) => void }) => {

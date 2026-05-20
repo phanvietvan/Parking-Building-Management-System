@@ -2,7 +2,11 @@ import { useState } from "react";
 import { C } from "../../config/theme";
 import { InputField, BtnPrimary, BtnSecondary } from "../../components/ui/SharedUI";
 
-export default function LoginScreen({ onNavigate }) {
+interface LoginScreenProps {
+  onNavigate: (screen: string) => void;
+}
+
+export default function LoginScreen({ onNavigate }: LoginScreenProps) {
   const [tab, setTab] = useState(0);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
@@ -50,4 +54,3 @@ export default function LoginScreen({ onNavigate }) {
     </div>
   );
 }
-
