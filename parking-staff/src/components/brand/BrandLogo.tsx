@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const APP_NAME = 'PM System';
 
@@ -138,7 +137,7 @@ const BrandLogo: React.FC<BrandLogoProps> = ({
   showTagline = false,
   tagline = 'Parking Management',
   asLink = false,
-  to = '/',
+  to = '#',
   className = '',
   textClassName = '',
 }) => {
@@ -168,9 +167,9 @@ const BrandLogo: React.FC<BrandLogoProps> = ({
 
   if (asLink) {
     return (
-      <Link to={to} className="inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl">
+      <a href={to} className="inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl">
         {content}
-      </Link>
+      </a>
     );
   }
 
